@@ -1,0 +1,4 @@
+uv.lock
+.idea/
+*.ipynb
+__pycache__/

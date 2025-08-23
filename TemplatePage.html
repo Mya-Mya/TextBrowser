@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<style>
+    @import url("https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css");
+    a {
+        cursor: pointer;
+    }
+
+    summary > h2 {
+        margin: 0;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TextBrowser</title>
+</head>
+<body>
+
+<div class="container" style="display:flex; gap:1rem; margin-bottom:1rem;">
+    <a onclick="onClearClick()">Clear</a>
+    <a onclick="onPlusHTTPClick()">+HTTP://</a>
+    <a onclick="onPlusHTTPSClick()">+HTTPS://</a>
+</div>
+
+<form action="?" method="POST" class="container" style="display: flex; flex-direction: column;">
+    <input id="url" type="text" name="url" placeholder="URL" autofocus style="height: 3rem"></input>
+    <button type="submit" style="height: 3rem">Go</button>
+</form>
+
+<main class="container">
+    {% if has_meta %}
+    <details open>
+        <summary><h2>Meta Data</h2></summary>
+        <section>
+            <table>
+                <tr>
+                    <th>Original Length</th>
+                    <th>{{original_html_length}}</th>
+                </tr>
+                <tr>
+                    <th>Transferred Length</th>
+                    <th>{{content_html_length}}</th>
+                </tr>
+                <tr>
+                    <th>Compression Rate</th>
+                    <th>{{compression_rate}}</th>
+                </tr>
+            </table>
+        </section>
+    </details>
+    {% endif %}
+
+    {% if content_html %}
+    <details open>
+        <summary><h2>Content</h2></summary>
+        <section style="line-height: 2">
+            {{ content_html }}
+        </section>
+    </details>
+    {% endif %}
+
+    {% if anchors %}
+    <details open>
+        <summary><h2>Anchors</h2></summary>
+        <section>
+            <table>
+                {% for anchor in anchors %}
+                <tr>
+                    <th>{{anchor.content}}</th>
+                    <th><a href="{{anchor.href}}">{{anchor.href}}</a></th>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </details>
+    {% endif %}
+</main>
+
+</body>
+
+<script defer>
+    const $url = document.getElementById("url");
+    const onClearClick = () => {
+        $url.value = "";
+    }
+    const onPlusHTTPClick = () => {
+        $url.value = "http://" + $url.value;
+    }
+    const onPlusHTTPSClick = () => {
+        $url.value = "https://" + $url.value;
+    }
+</script>
+</html>
