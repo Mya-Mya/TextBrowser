@@ -15,6 +15,7 @@ class Anchor:
 
 @dataclass
 class RenderingArg:
+    url:str = ""
     has_meta: bool = False
     original_html_length: int = 0
     content_html_length: int = 0

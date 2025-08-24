@@ -31,11 +31,16 @@
 </form>
 
 <main class="container">
-    {% if has_meta %}
+
     <details open>
-        <summary><h2>Meta Data</h2></summary>
+        <summary><h2>Info</h2></summary>
         <section>
             <table>
+                <tr>
+                    <th>URL</th>
+                    <th><a href="{{url}}">{{url}}</a></th>
+                </tr>
+                {% if has_meta %}
                 <tr>
                     <th>Original Length</th>
                     <th>{{original_html_length}}</th>
@@ -48,10 +53,11 @@
                     <th>Compression Rate</th>
                     <th>{{compression_rate}}</th>
                 </tr>
+                {% endif %}
             </table>
         </section>
     </details>
-    {% endif %}
+
 
     {% if content_html %}
     <details open>

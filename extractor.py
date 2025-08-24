@@ -13,6 +13,7 @@ def extract_li_list(element: Tag) -> list[str]:
 
 def extract_content_html(url: str) -> RenderingArg:
     out = RenderingArg()
+    out.url = url
     try:
         # Fetch HTML
         headers = {'User-Agent': 'Mozilla/5.0'}
