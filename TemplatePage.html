@@ -77,6 +77,40 @@
         </section>
     </details>
     {% endif %}
+
+    {% if uls %}
+    <details>
+        <summary><h2>Unordered Lists</h2></summary>
+        <section>
+            {% for ul in uls %}
+            <hr>
+            <ul>
+                {% for li in ul %}
+                <li>{{li}}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+            <hr>
+        </section>
+    </details>
+    {% endif %}
+
+    {% if ols %}
+    <details>
+        <summary><h2>Ordered Lists</h2></summary>
+        <section>
+            {% for ol in ols %}
+            <hr>
+            <ol>
+                {% for li in ol %}
+                <li>{{li}}</li>
+                {% endfor %}
+            </ol>
+            {% endfor %}
+            <hr>
+        </section>
+    </details>
+    {% endif %}
 </main>
 
 </body>

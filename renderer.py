@@ -21,6 +21,8 @@ class RenderingArg:
     compression_rate: str = ""
     content_html: str = ""
     anchors: list[Anchor] = field(default_factory=list)
+    uls:list[list[str]] = field(default_factory=list)
+    ols:list[list[str]] = field(default_factory=list)
 
 
 def render(arg: RenderingArg):

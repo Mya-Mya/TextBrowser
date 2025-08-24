@@ -1,6 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 from renderer import RenderingArg, Anchor
+
+
+def extract_li_list(element: Tag) -> list[str]:
+    li_list = []
+    for li_element in element.find_all("li"):
+        li_list.append(li_element.get_text(strip=True))
+    return li_list
 
 
 def extract_content_html(url: str) -> RenderingArg:
@@ -24,6 +32,10 @@ def extract_content_html(url: str) -> RenderingArg:
         # Eliminate seemingly noisy tags
         for tag in soup(['script', 'style', 'header', 'footer', 'nav', 'aside']):
             tag.decompose()
+
+        # Extract Lists
+        out.uls = [extract_li_list(ul) for ul in soup.find_all("ul")]
+        out.ols = [extract_li_list(ol) for ol in soup.find_all("ol")]
 
         # Extract seemingly content tags
         candidates = soup.find_all(['article', 'main', 'section', 'div'])
