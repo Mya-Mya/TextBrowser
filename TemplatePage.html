@@ -69,13 +69,13 @@
     {% endif %}
 
     {% if anchors %}
-    <details open>
+    <details>
         <summary><h2>Anchors</h2></summary>
         <section>
             <table>
                 {% for anchor in anchors %}
                 <tr>
-                    <th>{{anchor.content}}</th>
+                    <th>{{anchor.content[:50]}}</th>
                     <th><a href="{{anchor.href}}">{{anchor.href}}</a></th>
                 </tr>
                 {% endfor %}
