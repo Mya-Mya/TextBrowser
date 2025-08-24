@@ -35,13 +35,13 @@ def is_safe_url(url: str) -> bool:
 if __name__ == "__main__":
     args = parse_argument()
     app = Flask(import_name=__name__)
-    @app.route("/", methods=["GET", "POST"])
+    @app.get("/")
     def handle():
         rendering_arg = RenderingArg()
-        if request.method == "POST":
-            url = request.form.get("url")
-            if is_safe_url(url):
-                rendering_arg = extract_content_html(url)
+
+        arg_url = request.args.get("url")
+        if arg_url is not None:
+            rendering_arg = extract_content_html(arg_url)
         rendered_html = render(rendering_arg)
         return make_response(rendered_html)
 
