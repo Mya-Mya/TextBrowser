@@ -1,10 +1,11 @@
-from flask import Flask, make_response, request
+from flask import Flask, make_response, request, Response
 from argparse import ArgumentParser
 from urllib.parse import urlparse
 import socket
 import ipaddress
 from extractor import extract_content_html
 from renderer import RenderingArg, render
+import gzip
 
 
 def parse_argument() -> dict:
@@ -43,7 +44,12 @@ if __name__ == "__main__":
         if arg_url is not None:
             rendering_arg = extract_content_html(arg_url)
         rendered_html = render(rendering_arg)
-        return make_response(rendered_html)
+
+        compressed_data = gzip.compress(rendered_html.encode())
+        response = Response(compressed_data)
+        response.headers['Content-Encoding'] = 'gzip'
+        response.headers['Content-Length'] = len(compressed_data)
+        return response
 
 
     app.run(
