@@ -2,14 +2,16 @@
 <html lang="ja">
 <style>
     @import url("https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css");
+
     a {
         cursor: pointer;
     }
 
-    summary > h2 {
+    summary>h2 {
         margin: 0;
     }
 </style>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,110 +19,122 @@
 
     <title>TextBrowser</title>
 </head>
+
 <body>
 
-<main class="container">
-    <form action="?" method="GET" class="container" style="display: flex; flex-direction: column;">
-        <input id="url" type="text" name="url" placeholder="URL" autofocus style="height: 3rem"></input>
-        <button type="submit" style="height: 3rem">Go</button>
-    </form>
-    
-    {% if has_meta %}
-    <details open>
-        <summary><h2>Info</h2></summary>
-        <section>
-            <table>
-                <tr>
-                    <th>URL</th>
-                    <th><a href="{{url}}">{{url}}</a></th>
-                </tr>
-                <tr>
-                    <th>Original Length</th>
-                    <th>{{original_html_length}}</th>
-                </tr>
-                <tr>
-                    <th>Transferred Length</th>
-                    <th>{{content_html_length}}</th>
-                </tr>
-                <tr>
-                    <th>Compression Rate</th>
-                    <th>{{compression_rate}}</th>
-                </tr>
-            </table>
-        </section>
-    </details>
-    {% endif %}
+    <main class="container">
+        <form action="?" method="GET" class="container" style="display: flex; flex-direction: column;">
+            <input id="url" type="text" name="url" placeholder="URL" autofocus style="height: 3rem"></input>
+            <button type="submit" style="height: 3rem">Go</button>
+        </form>
+
+        {% if has_meta %}
+        <details open>
+            <summary>
+                <h2>Info</h2>
+            </summary>
+            <section>
+                <table>
+                    <tr>
+                        <th>URL</th>
+                        <th><a href="{{url}}">{{url}}</a></th>
+                    </tr>
+                    <tr>
+                        <th>Original Length</th>
+                        <th>{{original_html_length}}</th>
+                    </tr>
+                    <tr>
+                        <th>Transferred Length</th>
+                        <th>{{content_html_length}}</th>
+                    </tr>
+                    <tr>
+                        <th>Compression Rate</th>
+                        <th>{{compression_rate}}</th>
+                    </tr>
+                </table>
+            </section>
+        </details>
+        {% endif %}
 
 
-    {% if content_html %}
-    <details open>
-        <summary><h2>Content</h2></summary>
-        <section style="line-height: 2">
-            <span id="content-span">
-                {{ content_html }}
-            </span>
-        </section>
-    </details>
-    {% endif %}
+        {% if content_html %}
+        <details open>
+            <summary>
+                <h2>Content</h2>
+            </summary>
+            <section style="line-height: 2">
+                <span id="content-span">
+                    {{ content_html }}
+                </span>
+            </section>
+        </details>
+        {% endif %}
 
-    {% if anchors %}
-    <details>
-        <summary><h2>Anchors</h2></summary>
-        <section>
-            <table>
-                {% for anchor in anchors %}
-                <tr>
-                    <th>{{anchor.content[:50]}}</th>
-                    <th><a href="{{anchor.href}}">{{anchor.href}}</a></th>
-                </tr>
+        {% if anchors %}
+        <details>
+            <summary>
+                <h2>Anchors</h2>
+            </summary>
+            <section>
+                <table>
+                    {% for anchor in anchors %}
+                    <tr>
+                        <th>{{anchor.content[:50]}}</th>
+                        <th><a href="{{anchor.href}}">{{anchor.href}}</a></th>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </section>
+        </details>
+        {% endif %}
+
+        {% if uls %}
+        <details>
+            <summary>
+                <h2>Unordered Lists</h2>
+            </summary>
+            <section>
+                {% for ul in uls %}
+                <hr>
+                <ul>
+                    {% for li in ul %}
+                    <li>{{li}}</li>
+                    {% endfor %}
+                </ul>
                 {% endfor %}
-            </table>
-        </section>
-    </details>
-    {% endif %}
+                <hr>
+            </section>
+        </details>
+        {% endif %}
 
-    {% if uls %}
-    <details>
-        <summary><h2>Unordered Lists</h2></summary>
-        <section>
-            {% for ul in uls %}
-            <hr>
-            <ul>
-                {% for li in ul %}
-                <li>{{li}}</li>
+        {% if ols %}
+        <details>
+            <summary>
+                <h2>Ordered Lists</h2>
+            </summary>
+            <section>
+                {% for ol in ols %}
+                <hr>
+                <ol>
+                    {% for li in ol %}
+                    <li>{{li}}</li>
+                    {% endfor %}
+                </ol>
                 {% endfor %}
-            </ul>
-            {% endfor %}
-            <hr>
-        </section>
-    </details>
-    {% endif %}
-
-    {% if ols %}
-    <details>
-        <summary><h2>Ordered Lists</h2></summary>
-        <section>
-            {% for ol in ols %}
-            <hr>
-            <ol>
-                {% for li in ol %}
-                <li>{{li}}</li>
-                {% endfor %}
-            </ol>
-            {% endfor %}
-            <hr>
-        </section>
-    </details>
-    {% endif %}
-</main>
+                <hr>
+            </section>
+        </details>
+        {% endif %}
+    </main>
 
 </body>
 <script defer>
     const $contentSpan = document.getElementById("content-span")
     let underlineSwitch = false
     $contentSpan.addEventListener("click", () => {
-        underlineSwitch = ! underlineSwitch
+        underlineSwitch = !underlineSwitch
         $contentSpan.style.borderBottom = underlineSwitch ? "solid 1px gray" : "none"
     })
 </script>
+
 </html>
