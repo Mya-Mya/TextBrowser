@@ -19,19 +19,13 @@
 </head>
 <body>
 
-<div class="container" style="display:flex; gap:1rem; margin-bottom:1rem;">
-    <a onclick="onClearClick()">Clear</a>
-    <a onclick="onPlusHTTPClick()">+HTTP://</a>
-    <a onclick="onPlusHTTPSClick()">+HTTPS://</a>
-</div>
-
-<form action="?" method="GET" class="container" style="display: flex; flex-direction: column;">
-    <input id="url" type="text" name="url" placeholder="URL" autofocus style="height: 3rem"></input>
-    <button type="submit" style="height: 3rem">Go</button>
-</form>
-
 <main class="container">
-
+    <form action="?" method="GET" class="container" style="display: flex; flex-direction: column;">
+        <input id="url" type="text" name="url" placeholder="URL" autofocus style="height: 3rem"></input>
+        <button type="submit" style="height: 3rem">Go</button>
+    </form>
+    
+    {% if has_meta %}
     <details open>
         <summary><h2>Info</h2></summary>
         <section>
@@ -40,7 +34,6 @@
                     <th>URL</th>
                     <th><a href="{{url}}">{{url}}</a></th>
                 </tr>
-                {% if has_meta %}
                 <tr>
                     <th>Original Length</th>
                     <th>{{original_html_length}}</th>
@@ -53,10 +46,10 @@
                     <th>Compression Rate</th>
                     <th>{{compression_rate}}</th>
                 </tr>
-                {% endif %}
             </table>
         </section>
     </details>
+    {% endif %}
 
 
     {% if content_html %}
@@ -120,17 +113,4 @@
 </main>
 
 </body>
-
-<script defer>
-    const $url = document.getElementById("url");
-    const onClearClick = () => {
-        $url.value = "";
-    }
-    const onPlusHTTPClick = () => {
-        $url.value = "http://" + $url.value;
-    }
-    const onPlusHTTPSClick = () => {
-        $url.value = "https://" + $url.value;
-    }
-</script>
 </html>
