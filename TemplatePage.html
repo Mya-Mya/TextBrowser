@@ -56,7 +56,9 @@
     <details open>
         <summary><h2>Content</h2></summary>
         <section style="line-height: 2">
-            {{ content_html }}
+            <span id="content-span">
+                {{ content_html }}
+            </span>
         </section>
     </details>
     {% endif %}
@@ -113,4 +115,12 @@
 </main>
 
 </body>
+<script defer>
+    const $contentSpan = document.getElementById("content-span")
+    let underlineSwitch = false
+    $contentSpan.addEventListener("click", () => {
+        underlineSwitch = ! underlineSwitch
+        $contentSpan.style.borderBottom = underlineSwitch ? "solid 1px gray" : "none"
+    })
+</script>
 </html>
