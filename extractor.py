@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from bs4.element import Tag
+from bs4.element import Tag, PageElement
 from renderer import RenderingArg, Anchor
 
 
@@ -14,6 +14,30 @@ def extract_li_list(element: Tag) -> list[str]:
 def extract_content_html(url: str) -> RenderingArg:
     out = RenderingArg()
     out.url = url
+
+    extracted_texts = []
+
+    def tree(pe: PageElement):
+        if pe is None:
+            return
+        name = str(pe.name)
+        is_isolated_line = name in ["h1", "h2", "h3", "h4", "figure"]
+        if is_isolated_line:
+            append_newline()
+        if not isinstance(pe, Tag):
+            text = pe.get_text(strip=True)
+            if text and text != "\n":
+                extracted_texts.append(text)
+            return
+        for c in pe.children:
+            tree(c)
+        if is_isolated_line:
+            append_newline()
+
+    def append_newline():
+        if extracted_texts and extracted_texts[-1] != "<br>":
+            extracted_texts.append("<br>")
+
     try:
         # Fetch HTML
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -43,8 +67,11 @@ def extract_content_html(url: str) -> RenderingArg:
         longest = max(candidates, key=lambda tag: len(tag.get_text(strip=True)), default=None)
         assert longest is not None, "No content found."
 
+        # Extract content
+        tree(longest)
+
         # Pack
-        out.content_html = longest.get_text(strip=True, separator="\n")
+        out.content_html = "".join(extracted_texts)
         out.has_meta = True
         out.original_html_length = len(original_html)
         out.content_html_length = len(out.content_html)
