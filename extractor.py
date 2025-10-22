@@ -48,6 +48,11 @@ def extract_content_html(url: str) -> RenderingArg:
 
         soup = BeautifulSoup(original_html, "html.parser")
 
+        # Extract Title
+        title_element = soup.find("title")
+        if title_element:
+            out.title = title_element.get_text(strip=True)
+
         # Extract Anchors
         for anchor_element in soup.find_all("a"):
             out.anchors.append(

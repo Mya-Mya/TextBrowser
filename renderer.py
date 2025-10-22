@@ -19,6 +19,7 @@ class RenderingArg:
     has_meta: bool = False
     original_html_length: int = 0
     content_html_length: int = 0
+    title: str = "TextBrowser"
     compression_rate: str = ""
     content_html: str = ""
     anchors: list[Anchor] = field(default_factory=list)
