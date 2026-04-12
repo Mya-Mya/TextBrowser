@@ -10,6 +10,10 @@
     summary>h2 {
         margin: 0;
     }
+
+    #content-span {
+        font-family: sans-serif;
+    }
 </style>
 
 <head>
@@ -130,11 +134,15 @@
 </body>
 <script defer>
     const $contentSpan = document.getElementById("content-span")
-    let underlineSwitch = false
-    $contentSpan.addEventListener("click", () => {
-        underlineSwitch = !underlineSwitch
-        $contentSpan.style.borderBottom = underlineSwitch ? "solid 1px gray" : "none"
-    })
+    let clickCount = 0
+    function switchStyle() {
+        clickCount = (clickCount + 1) % 4
+
+        $contentSpan.style.borderBottom = (clickCount == 0 || clickCount == 2) ? "solid 1px gray" : "none"
+        $contentSpan.style.fontFamily = (clickCount == 1 || clickCount == 2) ? "sans-serif" : "serif"
+    }
+    $contentSpan.addEventListener("click", switchStyle)
+    document.addEventListener("DOMContentLoaded", switchStyle)
 </script>
 
 </html>
