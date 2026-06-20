@@ -34,7 +34,7 @@ def handle_extraction_request(url: str, type: str):
         response = make_response(result["data"])
         response.headers.set("Content-Type", "image/jpg")
         filename = result["filename"]
-        response.headers.set("Content-Disposition", f"inline; filename=\"{filename}\"")
+        response.headers.set("Content-Disposition", f'inline; filename="{filename}"')
         return response
     return return_error_page(f"The page type {type} is not supported.")
 
