@@ -27,7 +27,7 @@ def extract_as_html_by_raw(html: str) -> dict:
         title = title_element.get_text(strip=True)
     # 不要そうなタグを削除
     for tag in soup(
-        ["script", "style", "header", "footer", "nav", "aside", "head", "button"]
+        ["script", "style", "header", "footer", "nav", "aside", "head", "button", "svg"]
     ):
         tag.extract()
     # コメントを削除
