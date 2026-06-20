@@ -24,11 +24,15 @@ def handle_extraction_request(url: str, type: str):
 
     if type == "html":
         result = extract_as_html(url)
-        return render_template("htmlpage.html", **result)
+        return render_template(
+            "htmlpage.html", title=result["title"], url=url, html=result["html"]
+        )
     if type == "pdf":
         result = extract_as_pdf(url)
         html = result["text"].replace("\n", "<br>")
-        return render_template("htmlpage.html", title=result["title"], html=html)
+        return render_template(
+            "htmlpage.html", title=result["title"], url=url, html=html
+        )
     if type == "image":
         result = extract_as_image(url)
         response = make_response(result["data"])
