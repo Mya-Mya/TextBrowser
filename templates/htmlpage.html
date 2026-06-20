@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<style>
+    @import url("https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css");
+
+    a {
+        cursor: pointer;
+    }
+
+    summary>h2 {
+        margin: 0;
+    }
+
+    #content-span {
+        font-family: sans-serif;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header>
+        <form action="?" method="GET" class="container">
+            <input id="url" type="text" name="url" placeholder="URL" autofocus></input>
+            <fieldset role="group">
+                <button type="submit" name="type" value="html" class="outline">HTML</button>
+                <button type="submit" name="type" value="pdf" class="outline secondary">PDF</button>
+                <button type="submit" name="type" value="image" class="outline secondary">Image</button>
+            </fieldset>
+        </form>
+    </header>
+    <main class="container">
+        {{ html|safe }}
+    </main>
+</body>
+
+<script defer>
+    const $main = document.querySelector("main")
+    let clickCount = 0
+    function switchStyle() {
+        clickCount = (clickCount + 1) % 2
+        $main.style.fontFamily = clickCount == 0 ? "sans-serif" : "serif"
+    }
+    $main.addEventListener("click", switchStyle)
+    document.addEventListener("DOMContentLoaded", switchStyle)
+</script>
+
+</html>
