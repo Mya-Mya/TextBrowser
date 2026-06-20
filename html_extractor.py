@@ -75,9 +75,9 @@ if __name__ == "__main__":
         if args.input.startswith("http://") or args.input.startswith("https://"):
             result = extract_as_html(args.input)
         else:
-            raw_html = Path(args.input).read_text()
+            raw_html = Path(args.input).read_text(encoding="utf-8")
             result = extract_as_html_by_raw(raw_html)
         print("Title:", result["title"])
-        Path(args.output).write_text(result["html"])
+        Path(args.output).write_text(result["html"], encoding="utf-8")
     except Exception as e:
         print(e, file=sys.stderr)
