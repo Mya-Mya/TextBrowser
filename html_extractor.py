@@ -34,6 +34,9 @@ def extract_as_html_by_raw(html: str) -> dict:
     comments = soup.find_all(string=lambda text: isinstance(text, Comment))
     for comment in comments:
         comment.extract()
+    # レンダリング時に不要な装飾を避けるため、一部のタグをdivに変更
+    for tag in soup(["article", "section"]):
+        tag.name = "div"
     # 画像をアンカーに置き換え
     for img in soup("img"):
         src = str(img.attrs.get("src") or "")
@@ -51,6 +54,10 @@ def extract_as_html_by_raw(html: str) -> dict:
         tag.attrs.clear()
         if href_val is not None:
             tag.attrs["href"] = href_val
+    # 空白のdivを削除
+    for div in soup("div"):
+        if div.get_text(strip=True) == "":
+            div.extract()
     # さらに短く
     shorten_html = str(soup)
     shorten_html = shorten_html.replace("\n", "")
