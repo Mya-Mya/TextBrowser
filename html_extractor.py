@@ -3,14 +3,51 @@ import sys
 from pathlib import Path
 from bs4 import BeautifulSoup, Comment
 import requests
+import re
+
+CANDIDATE_ENCODINGS = ["utf-8", "shift-jis", "euc_jp", "iso2022_jp", "cp932"]
+
+
+def decode(raw: bytes):
+    # 複数の文字コードでデコード
+    success = []
+    for encoding in CANDIDATE_ENCODINGS:
+        try:
+            text = raw.decode(encoding=encoding)
+            success.append((encoding, text))
+        except Exception as e:
+            pass
+    # 全滅したら
+    if not success:
+        raise UnicodeDecodeError("Failed to decode.")
+    # 1つだけ成功したら
+    if len(success) == 1:
+        return success[0][1]
+
+    # 複数成功したら
+    detected_encoding = None
+    # <meta charset="...">を抽出する
+    try:
+        head = raw[:8192].decode("ascii", errors="ignore")
+        m = re.search(
+            r"<meta[^>]+charset=[\"\']?([a-zA-Z0-9_\-]+)[\"\']?", head, re.IGNORECASE
+        )
+        if m:
+            detected_encoding = m.group(1).lower()
+    except Exception as e:
+        pass
+    if detected_encoding is not None:
+        for encoding, text in success:
+            if encoding == detected_encoding:
+                return text
+    return success[0][1]
 
 
 def fetch_html(url: str) -> str:
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(url, headers=headers, timeout=10)
     response.raise_for_status()
-    response.encoding = response.encoding or response.apparent_encoding
-    return response.text
+    return decode(response.content)
 
 
 def extract_as_html(url: str) -> dict:
