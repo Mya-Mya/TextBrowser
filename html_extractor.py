@@ -4,6 +4,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Comment
 import requests
 import re
+from urllib.parse import urljoin
 
 CANDIDATE_ENCODINGS = ["utf-8", "shift-jis", "euc_jp", "iso2022_jp", "cp932"]
 
@@ -52,10 +53,10 @@ def fetch_html(url: str) -> str:
 
 def extract_as_html(url: str) -> dict:
     html = fetch_html(url)
-    return extract_as_html_by_raw(html)
+    return extract_as_html_by_raw(html, base_url=url)
 
 
-def extract_as_html_by_raw(html: str) -> dict:
+def extract_as_html_by_raw(html: str, base_url:str="") -> dict:
     soup = BeautifulSoup(html, "html.parser")
     # タイトル
     title = None
@@ -85,12 +86,12 @@ def extract_as_html_by_raw(html: str) -> dict:
         a.append(alt)
         a.attrs["href"] = src
         img.replace_with(a)
-    # 属性を全削除
+    # 属性を全削除・リンクの絶対パスを作る
     for tag in soup.find_all(True):
         href_val = tag.attrs.get("href")
         tag.attrs.clear()
         if href_val is not None:
-            tag.attrs["href"] = href_val
+            tag.attrs["href"] = urljoin(base_url, href_val)
     # 空白のdivを削除
     for div in soup("div"):
         if div.get_text(strip=True) == "":
